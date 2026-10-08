@@ -101,7 +101,7 @@ src/
 │   └── question-types/                  MultipleChoice, WordBank, SynonymSpotter, WordLimit
 ├── data/
 │   ├── index.js                         Loads and orders lessons; getUnit(unitId)
-│   └── lessons/                         unit-01 … unit-03 JSON
+│   └── lessons/                         unit-01 … unit-06 JSON
 ├── hooks/useSound.js                    Web Audio tones, no audio files
 ├── pages/                               Home, QuizView, SummaryView
 ├── store/
@@ -321,7 +321,7 @@ console.log(useGameStore.getState().xp) // previous XP + 10
 ## Roadmap
 
 - [x] Vite + React + Tailwind CSS v3 scaffold with theme tokens
-- [x] Three ASD-STE100 units: approved verbs, passive to active, noun clusters
+- [x] Six ASD-STE100 units: approved verbs, passive to active, noun clusters, one instruction per sentence, warnings and cautions, descriptions and tenses
 - [x] Zustand game store saved to `localStorage`
 - [x] Multiple choice, word bank, synonym spotter and word limit cards
 - [x] Feedback panel with confetti, shake and STE rule explanation
