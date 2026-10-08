@@ -4,7 +4,7 @@ A browser-only, Duolingo-style trainer for ASD-STE100 Simplified Technical Engli
 
 [![Validate lessons](https://img.shields.io/github/actions/workflow/status/JFrusher/STE-Lingo/validate-lessons.yml?style=flat-square&label=validate%20lessons)](https://github.com/JFrusher/STE-Lingo/actions/workflows/validate-lessons.yml)
 ![Version](https://img.shields.io/badge/version-0.0.0-blue?style=flat-square)
-![License](https://img.shields.io/badge/license-not%20specified-lightgrey?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](./LICENSE)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
@@ -333,7 +333,7 @@ console.log(useGameStore.getState().xp) // previous XP + 10
 - [x] Demo GIF
 - [ ] Heart refill over time (today: a manual "Refill hearts" button at 0 hearts)
 - [ ] Lesson review against the official ASD-STE100 dictionary (word swaps were checked against third-party reproductions only)
-- [ ] `LICENSE` file
+- [x] MIT `LICENSE`
 
 ## Contributing & License
 
@@ -350,5 +350,4 @@ console.log(useGameStore.getState().xp) // previous XP + 10
 
 4. Open a pull request against `main`. The **Validate lessons** workflow runs all four checks and must pass.
 
-> [!IMPORTANT]
-> **License:** none yet. The repo has no `LICENSE` file, so default copyright applies and others have no right to reuse the code. Add a `LICENSE` file (for example MIT) before you accept outside contributions, then update the badge above.
+Released under the [MIT License](./LICENSE). By opening a pull request you agree that your contribution is licensed the same way.
