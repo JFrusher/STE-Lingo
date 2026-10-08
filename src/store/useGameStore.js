@@ -37,7 +37,7 @@ export const useGameStore = create()(
             ...quiz,
             correctCount: correct ? quiz.correctCount + 1 : quiz.correctCount,
             wrongIds: correct ? quiz.wrongIds : [...quiz.wrongIds, question.id],
-            feedback: { correct },
+            feedback: { correct, answer },
           },
         })
         return correct

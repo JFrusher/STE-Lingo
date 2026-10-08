@@ -19,7 +19,7 @@ export default function Sidebar() {
         <p className="text-sm font-bold text-gray-500">
           {completedCount} of {units.length} units complete
         </p>
-        <ProgressBar value={completedCount / units.length} />
+        <ProgressBar value={completedCount / units.length} label="Units complete" />
       </div>
       <p className="text-sm font-bold text-gray-500">{xp} XP earned in total</p>
       <button

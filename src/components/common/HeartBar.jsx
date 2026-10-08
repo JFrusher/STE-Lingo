@@ -15,9 +15,12 @@ export default function HeartBar() {
   }, [hearts, animate, scope])
 
   return (
-    <div ref={scope} className="flex items-center gap-1 font-bold text-danger" aria-label={`${hearts} hearts`}>
+    <div ref={scope} className="flex items-center gap-1 font-bold text-danger">
       <Heart className="h-6 w-6" fill="currentColor" aria-hidden="true" />
-      <span aria-hidden="true">{hearts}</span>
+      <span>
+        {hearts}
+        <span className="sr-only"> hearts</span>
+      </span>
     </div>
   )
 }

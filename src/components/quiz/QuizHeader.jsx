@@ -12,7 +12,7 @@ export default function QuizHeader({ progress, onExit }) {
       >
         <X className="h-7 w-7" aria-hidden="true" />
       </button>
-      <ProgressBar value={progress} />
+      <ProgressBar value={progress} label="Lesson progress" />
     </div>
   )
 }

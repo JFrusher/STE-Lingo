@@ -16,7 +16,6 @@ export default function TopNav() {
             type="button"
             className="rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}
-            aria-pressed={!soundOn}
             onClick={toggleSound}
           >
             <SoundIcon className="h-6 w-6" aria-hidden="true" />

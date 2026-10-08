@@ -38,7 +38,8 @@ export default function QuizView() {
 function QuizStep({ question, feedback }) {
   const submitAnswer = useGameStore((s) => s.submitAnswer)
   const nextQuestion = useGameStore((s) => s.nextQuestion)
-  const [answer, setAnswer] = useState(() => initialAnswer(question))
+  // After a reload, restore the submitted answer so the input and the feedback still match.
+  const [answer, setAnswer] = useState(() => feedback?.answer ?? initialAnswer(question))
   const playSound = useSound()
 
   // Sound and confetti fire from the click, not an effect, so they play exactly once.
