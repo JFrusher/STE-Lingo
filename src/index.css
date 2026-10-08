@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card {
+    @apply rounded-card border-2 border-gray-200 bg-white p-6 shadow-card;
+  }
+  .btn {
+    @apply rounded-card px-6 py-3 font-bold uppercase tracking-wide text-white shadow-btn transition active:translate-y-[3px] active:shadow-btn-pressed;
+  }
+}
