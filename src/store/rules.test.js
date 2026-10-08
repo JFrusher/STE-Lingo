@@ -43,6 +43,9 @@ test('word_limit model answers pass, bad edits fail', () => {
     'unit-01/q7': 'Before you start the procedure, put on the safety gloves.',
     'unit-02/q6': 'Release the hydraulic pressure before you disconnect the hydraulic lines from the actuator.',
     'unit-03/q6': 'Examine the spring of the pressure relief valve for corrosion before you install it.',
+    'unit-04/q6': 'Make sure that the electrical power is off.',
+    'unit-05/q6': 'Put on safety goggles near the hydraulic system. Hydraulic fluid can cause injury to your eyes.',
+    'unit-06/q6': 'The fuel system supplies fuel to the engine at a constant pressure. It has a tank, two pumps, a filter and pipes.',
   }
   for (const [key, text] of Object.entries(models)) {
     const [unitId, id] = key.split('/')

@@ -1,0 +1,69 @@
+{
+  "unitId": "unit-05",
+  "unitTitle": "Warnings and Cautions",
+  "description": "Start each warning or caution with a clear command, then give the risk in a short explanation.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "When do you use a WARNING instead of a CAUTION?",
+      "options": [
+        "When there is a risk of damage to equipment",
+        "When there is a risk of injury or death",
+        "When the step is optional"
+      ],
+      "correctIndex": 1,
+      "explanation": "A warning tells the reader about a risk of injury or death. A caution tells the reader about a risk of damage to equipment."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "How must an STE warning start?",
+      "options": [
+        "With the risk, for example 'High voltage can kill.'",
+        "With a simple and clear command",
+        "With the word 'Please'"
+      ],
+      "correctIndex": 1,
+      "explanation": "Start a warning or a caution with a simple and clear command. Then give a short explanation of the risk."
+    },
+    {
+      "id": "q3",
+      "type": "word_bank",
+      "prompt": "Build the command that starts this warning about hot engine parts:",
+      "tokens": ["engine", "Please", "Do", "the", "it", "not", "cool.", "avoid", "touch", "is", "until"],
+      "correctAnswer": ["Do", "not", "touch", "the", "engine", "until", "it", "is", "cool."],
+      "explanation": "Start with a direct command. 'Do not touch the engine until it is cool' is clearer than a polite request such as 'Please avoid touching'."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "Which is the best STE caution?",
+      "options": [
+        "CAUTION: Damage to the seal can occur if the tool is used incorrectly.",
+        "CAUTION: Use only a plastic tool to remove the seal. A metal tool can cause damage to the seal.",
+        "CAUTION: Be careful with the seal."
+      ],
+      "correctIndex": 1,
+      "explanation": "The caution starts with a clear command, then a short sentence gives the risk. The other options do not tell the reader what to do."
+    },
+    {
+      "id": "q5",
+      "type": "synonym_spotter",
+      "prompt": "Tap the words that make this warning weak and indirect:",
+      "sentence": "It is recommended that you disconnect the power before you open the panel.",
+      "unapprovedIndices": [0, 1, 2, 3, 4],
+      "approvedAlternative": "Disconnect the power before you open the panel.",
+      "explanation": "A warning must give a clear command. 'It is recommended that you' hides the instruction and makes it sound optional."
+    },
+    {
+      "id": "q6",
+      "type": "word_limit",
+      "prompt": "Rewrite this warning in 20 words or fewer. Start with a command. Keep 'goggles', 'hydraulic' and 'injury':",
+      "initialText": "WARNING: It is very important that personnel should always remember to wear the approved safety goggles at all times when they are working with the high-pressure hydraulic system because fluid can cause injury to the eyes.",
+      "maxWords": 20,
+      "acceptableKeywords": ["goggles", "hydraulic", "injury"],
+      "explanation": "Give the command first, then the risk: 'Put on safety goggles near the hydraulic system. Hydraulic fluid can cause injury to your eyes.'"
+    }
+  ]
+}
