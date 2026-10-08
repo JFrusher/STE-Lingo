@@ -1,0 +1,65 @@
+{
+  "unitId": "unit-02",
+  "unitTitle": "Passive to Active Commands",
+  "description": "Change passive procedural sentences into direct commands that start with a verb.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Which instruction is written as an STE command?",
+      "options": [
+        "The filter must be replaced after 500 hours of operation.",
+        "Replace the filter after 500 hours of operation.",
+        "Filter replacement should be done after 500 hours of operation."
+      ],
+      "correctIndex": 1,
+      "explanation": "STE instructions use the imperative (command) form. Start the sentence with the verb: 'Replace the filter...'."
+    },
+    {
+      "id": "q2",
+      "type": "word_bank",
+      "prompt": "Write the STE step for: 'The stop button should be pushed by the operator.'",
+      "tokens": ["The", "Push", "operator", "the", "must", "stop", "be", "button.", "pushed"],
+      "correctAnswer": ["Push", "the", "stop", "button."],
+      "explanation": "STE procedural steps start with an imperative verb. The reader is the operator, so you do not need 'by the operator'."
+    },
+    {
+      "id": "q3",
+      "type": "word_bank",
+      "prompt": "Write the STE step for: 'The cover is removed by the technician.'",
+      "tokens": ["is", "the", "Remove", "removed", "by", "cover.", "The", "technician."],
+      "correctAnswer": ["Remove", "the", "cover."],
+      "explanation": "Change the passive 'is removed by the technician' into a direct command: 'Remove the cover.'"
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "Why does STE use commands in procedures?",
+      "options": [
+        "Commands are more polite.",
+        "Commands tell the reader directly what to do.",
+        "Commands make sentences longer and more precise."
+      ],
+      "correctIndex": 1,
+      "explanation": "An active command shows who does the action (the reader) and what the action is. Passive sentences hide this."
+    },
+    {
+      "id": "q5",
+      "type": "synonym_spotter",
+      "prompt": "Tap the words that make this step passive:",
+      "sentence": "The bolts must be tightened to 25 Nm.",
+      "unapprovedIndices": [2, 3, 4],
+      "approvedAlternative": "Tighten the bolts to 25 Nm.",
+      "explanation": "'Must be tightened' is passive. In a procedure, start with the verb: 'Tighten the bolts to 25 Nm.'"
+    },
+    {
+      "id": "q6",
+      "type": "word_limit",
+      "prompt": "Write this step as an active command with 20 words or fewer. Keep 'release', 'pressure', 'before' and 'disconnect':",
+      "initialText": "It is recommended that the hydraulic pressure should be released by the maintenance personnel before the hydraulic lines are disconnected from the actuator in order to avoid injury.",
+      "maxWords": 20,
+      "acceptableKeywords": ["release", "pressure", "before", "disconnect"],
+      "explanation": "Use the active voice and a command: 'Release the hydraulic pressure before you disconnect the hydraulic lines from the actuator.'"
+    }
+  ]
+}

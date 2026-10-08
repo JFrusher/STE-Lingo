@@ -1,17 +1,25 @@
-import confetti from 'canvas-confetti'
-import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import Sidebar from './components/layout/Sidebar.jsx'
+import TopNav from './components/layout/TopNav.jsx'
+import Home from './pages/Home.jsx'
+import QuizView from './pages/QuizView.jsx'
+import SummaryView from './pages/SummaryView.jsx'
+import { useGameStore } from './store/useGameStore.js'
 
-// Phase 1 smoke screen: proves Tailwind theme, lucide, framer-motion and confetti all load.
 export default function App() {
+  const quiz = useGameStore((s) => s.activeQuiz)
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <motion.div className="card w-full max-w-md text-center" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-        <h1 className="mb-4 text-3xl font-extrabold text-primary">STE-Lingo</h1>
-        <button className="btn inline-flex items-center gap-2 bg-primary" onClick={() => confetti()}>
-          <Check aria-hidden="true" /> Check
-        </button>
-      </motion.div>
-    </main>
+    <div className="min-h-screen overflow-x-clip bg-gray-50">
+      <TopNav />
+      {quiz ? (
+        <main className="mx-auto max-w-2xl px-4 py-8">{quiz.finished ? <SummaryView /> : <QuizView />}</main>
+      ) : (
+        <div className="mx-auto grid max-w-5xl gap-8 px-4 py-8 lg:grid-cols-[1fr_18rem] lg:items-start">
+          <main>
+            <Home />
+          </main>
+          <Sidebar />
+        </div>
+      )}
+    </div>
   )
 }

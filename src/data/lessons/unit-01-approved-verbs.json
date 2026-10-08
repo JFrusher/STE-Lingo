@@ -1,0 +1,71 @@
+{
+  "unitId": "unit-01",
+  "unitTitle": "Approved Dictionary Verbs",
+  "description": "Replace unapproved words (utilize, terminate, commence, prior to) with STE-approved words.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Which sentence uses only STE-approved verbs?",
+      "options": [
+        "Utilize the wrench to loosen the bolt.",
+        "Use the wrench to loosen the bolt.",
+        "Commence loosening the bolt with the wrench."
+      ],
+      "correctIndex": 1,
+      "explanation": "'Utilize' and 'commence' are not in the STE dictionary. Use 'use' and 'start'."
+    },
+    {
+      "id": "q2",
+      "type": "synonym_spotter",
+      "prompt": "Tap the words that are not STE-approved:",
+      "sentence": "Prior to the test, examine the oil level.",
+      "unapprovedIndices": [0, 1],
+      "approvedAlternative": "Before",
+      "explanation": "'Prior to' is not approved in STE. Always use 'before'."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Which word is the STE-approved replacement for 'commence'?",
+      "options": ["Initiate", "Start", "Proceed"],
+      "correctIndex": 1,
+      "explanation": "The STE dictionary gives 'start' for this meaning. 'Commence' and 'initiate' are not approved."
+    },
+    {
+      "id": "q4",
+      "type": "synonym_spotter",
+      "prompt": "Tap the word that is not STE-approved:",
+      "sentence": "Terminate the pump if the pressure is too high.",
+      "unapprovedIndices": [0],
+      "approvedAlternative": "Stop",
+      "explanation": "'Terminate' is not approved in STE. Use 'stop'."
+    },
+    {
+      "id": "q5",
+      "type": "word_bank",
+      "prompt": "Write this step in STE: 'Utilize a torque wrench to tighten the nut.'",
+      "tokens": ["tighten", "Utilize", "a", "nut.", "torque", "Use", "the", "Employ", "wrench", "to"],
+      "correctAnswer": ["Use", "a", "torque", "wrench", "to", "tighten", "the", "nut."],
+      "explanation": "'Utilize' and 'employ' are not approved in STE. Use the simple verb 'use'."
+    },
+    {
+      "id": "q6",
+      "type": "synonym_spotter",
+      "prompt": "Tap the word that is not STE-approved:",
+      "sentence": "Ensure that the valve is closed before you continue.",
+      "unapprovedIndices": [0],
+      "approvedAlternative": "Make sure",
+      "explanation": "'Ensure' is not approved in STE. Use 'make sure'."
+    },
+    {
+      "id": "q7",
+      "type": "word_limit",
+      "prompt": "Edit this step so it has 20 words or fewer. Keep 'before' and 'gloves':",
+      "initialText": "Prior to the commencement of the maintenance procedure, it is necessary that you utilize the approved safety gloves in order to prevent injury to your hands from the sharp edges.",
+      "maxWords": 20,
+      "acceptableKeywords": ["before", "gloves"],
+      "explanation": "STE procedural sentences have a maximum of 20 words. 'Prior to' becomes 'before', 'utilize' becomes 'use' or 'put on', and 'in order to' becomes 'to'."
+    }
+  ]
+}
