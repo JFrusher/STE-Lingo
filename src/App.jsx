@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import Sidebar from './components/layout/Sidebar.jsx'
 import TopNav from './components/layout/TopNav.jsx'
 import Home from './pages/Home.jsx'
@@ -20,6 +21,7 @@ export default function App() {
           <Sidebar />
         </div>
       )}
+      <Analytics />
     </div>
   )
 }
