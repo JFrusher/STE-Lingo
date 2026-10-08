@@ -1,14 +1,8 @@
-import confetti from 'canvas-confetti'
 import { motion } from 'framer-motion'
 import { CircleCheck, CircleX } from 'lucide-react'
-import { useEffect } from 'react'
-import { correctAnswerText } from '../../store/rules.js'
+import { correctAnswerText, wordLimitProblems } from '../../store/rules.js'
 
-export default function FeedbackModal({ correct, question, onContinue }) {
-  useEffect(() => {
-    if (correct) confetti({ particleCount: 60, spread: 70, origin: { y: 0.9 } })
-  }, [correct])
-
+export default function FeedbackModal({ correct, question, answer, onContinue }) {
   const Icon = correct ? CircleCheck : CircleX
   return (
     <motion.div
@@ -27,6 +21,16 @@ export default function FeedbackModal({ correct, question, onContinue }) {
             <p className="text-2xl font-extrabold">{correct ? 'Correct!' : 'Not quite.'}</p>
             {!correct && (
               <>
+                {question.type === 'word_limit' && (
+                  <>
+                    <p className="mt-2 font-bold">What to fix:</p>
+                    <ul className="list-inside list-disc">
+                      {wordLimitProblems(question, answer).map((problem) => (
+                        <li key={problem}>{problem}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
                 <p className="mt-2 font-bold">Correct answer:</p>
                 <p>{correctAnswerText(question)}</p>
                 <p className="mt-2 font-bold">STE rule:</p>

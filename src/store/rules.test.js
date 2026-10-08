@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { readdirSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { correctAnswerText, countWords, currentStreak, isCorrect, nextStreak } from './rules.js'
+import { correctAnswerText, countWords, currentStreak, isCorrect, nextStreak, wordLimitProblems } from './rules.js'
 
 const dir = new URL('../data/lessons/', import.meta.url)
 const lessons = readdirSync(dir).map((file) => JSON.parse(readFileSync(new URL(file, dir), 'utf8')))
@@ -51,6 +51,12 @@ test('word_limit model answers pass, bad edits fail', () => {
   const q = byId('unit-01', 'q7')
   assert.equal(isCorrect(q, 'Put on the gloves.'), false, 'missing keyword')
   assert.equal(isCorrect(q, 'Beforehand put on the gloveset.'), false, 'keyword must be a whole word')
+  assert.equal(isCorrect(q, 'Before you start, utilize the gloves.'), false, 'unapproved word')
+  assert.deepEqual(wordLimitProblems(q, 'Prior to the start, you must utilize gloves and ensure they fit.'), [
+    'Missing: before.',
+    'Not STE-approved: utilize, ensure, prior to.',
+  ])
+  assert.deepEqual(wordLimitProblems(q, q.initialText).slice(0, 1), ['30 words. The maximum is 20.'])
 })
 
 test('synonym_spotter needs the exact set of words', () => {

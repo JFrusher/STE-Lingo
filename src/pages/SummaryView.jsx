@@ -1,6 +1,5 @@
-import confetti from 'canvas-confetti'
 import { HeartCrack, Target, Trophy, Zap } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { getUnit } from '../data/index.js'
 import { XP_PER_CORRECT, correctAnswerText } from '../store/rules.js'
 import { useGameStore } from '../store/useGameStore.js'
@@ -14,10 +13,6 @@ export default function SummaryView() {
   const answeredCount = quiz.correctCount + quiz.wrongIds.length
   const accuracy = answeredCount === 0 ? 0 : Math.round((quiz.correctCount / answeredCount) * 100)
   const mistakes = unit.questions.filter((q) => quiz.wrongIds.includes(q.id))
-
-  useEffect(() => {
-    if (quiz.passed) confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } })
-  }, [quiz.passed])
 
   return (
     <div className="flex flex-col items-center gap-6 text-center">

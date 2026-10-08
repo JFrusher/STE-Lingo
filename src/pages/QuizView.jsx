@@ -1,9 +1,11 @@
+import confetti from 'canvas-confetti'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import FeedbackModal from '../components/quiz/FeedbackModal.jsx'
 import QuestionCard from '../components/quiz/QuestionCard.jsx'
 import QuizHeader from '../components/quiz/QuizHeader.jsx'
 import { getUnit } from '../data/index.js'
+import { useSound } from '../hooks/useSound.js'
 import { hasAnswer, initialAnswer } from '../store/rules.js'
 import { useGameStore } from '../store/useGameStore.js'
 
@@ -15,7 +17,7 @@ export default function QuizView() {
   const answered = quiz.index + (quiz.feedback ? 1 : 0)
 
   return (
-    <div className="flex flex-col gap-6 overflow-x-clip pb-64">
+    <div className="flex flex-col gap-6 pb-64">
       <QuizHeader progress={answered / unit.questions.length} onExit={exitQuiz} />
       <AnimatePresence mode="wait">
         <motion.div
@@ -37,6 +39,21 @@ function QuizStep({ question, feedback }) {
   const submitAnswer = useGameStore((s) => s.submitAnswer)
   const nextQuestion = useGameStore((s) => s.nextQuestion)
   const [answer, setAnswer] = useState(() => initialAnswer(question))
+  const playSound = useSound()
+
+  // Sound and confetti fire from the click, not an effect, so they play exactly once.
+  function check() {
+    const correct = submitAnswer(answer)
+    playSound(correct ? 'correct' : 'wrong')
+    if (correct) confetti({ particleCount: 60, spread: 70, origin: { y: 0.9 } })
+  }
+
+  function next() {
+    nextQuestion()
+    if (!useGameStore.getState().activeQuiz.passed) return
+    playSound('complete')
+    confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } })
+  }
 
   return (
     <>
@@ -48,7 +65,7 @@ function QuizStep({ question, feedback }) {
               type="button"
               className="btn w-full bg-primary sm:w-auto"
               disabled={!hasAnswer(answer)}
-              onClick={() => submitAnswer(answer)}
+              onClick={check}
             >
               Check
             </button>
@@ -56,7 +73,7 @@ function QuizStep({ question, feedback }) {
         </div>
       )}
       <AnimatePresence>
-        {feedback && <FeedbackModal correct={feedback.correct} question={question} onContinue={nextQuestion} />}
+        {feedback && <FeedbackModal correct={feedback.correct} question={question} answer={answer} onContinue={next} />}
       </AnimatePresence>
     </>
   )

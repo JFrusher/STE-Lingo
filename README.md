@@ -12,7 +12,7 @@ A browser-only, Duolingo-style trainer for ASD-STE100 Simplified Technical Engli
 
 ![Project Demo](./docs/assets/demo.gif)
 
-> Placeholder (`docs/assets/demo.gif` does not exist yet). Record about 15 s at 1000×800: start **Unit 1 · Approved Dictionary Verbs** from the skill tree, answer a word-bank question correctly (confetti, green panel), get a synonym-spotter question wrong (card shake, heart lost, red panel with the STE rule), then finish on the summary screen with XP and accuracy.
+> Unit 1 played start to finish: a wrong synonym-spotter answer (heart lost, red panel with the STE rule), a word bank assembled tile by tile, a `word_limit` rewrite, then the summary with XP and accuracy.
 
 ## Key Features
 
@@ -20,7 +20,7 @@ A browser-only, Duolingo-style trainer for ASD-STE100 Simplified Technical Engli
 - **Lessons in Git:** every unit is a JSON file in `src/data/lessons/`. Vite loads them at build time with `import.meta.glob`, so the app needs no backend or database.
 - **Schema-checked content:** a strict Zod schema (`src/types/lesson.js`) catches unknown keys, out-of-range indices, word-bank answers the token pool can't build, and duplicate IDs. The check runs before every build and in CI.
 - **Progress saved in the browser:** a Zustand store with the `persist` middleware keeps hearts, XP, streak, completed units and the in-progress quiz in `localStorage` under the key `ste-lingo`.
-- **Game loop:** 5 hearts, +10 XP per correct answer, a daily streak, and units that unlock in order. A slide-up feedback panel uses `framer-motion` and `canvas-confetti`.
+- **Game loop:** 5 hearts, +10 XP per correct answer, a daily streak, and units that unlock in order. A slide-up feedback panel uses `framer-motion` and `canvas-confetti`, and Web Audio tones play on each answer (mute in the top bar).
 - **Explanations on every mistake:** each wrong answer shows the correct answer and the lesson's STE rule. The summary screen can list every mistake again.
 
 ## Architecture / How It Works
@@ -76,10 +76,13 @@ sequenceDiagram
   S->>R: isCorrect(question, answer)
   R-->>S: true / false
   S->>S: +10 XP, or −1 heart and log the question id
-  S-->>F: activeQuiz.feedback = { correct }
-  F-->>U: Green panel + confetti, or red panel + correct answer + STE rule
+  S-->>Q: returns correct, sets activeQuiz.feedback
+  Q-->>U: Sound, plus confetti if correct
+  S-->>F: feedback drives the panel
+  F-->>U: Green panel, or red panel + what to fix + STE rule
   U->>F: "Continue"
-  F->>S: nextQuestion()
+  F->>Q: onContinue
+  Q->>S: nextQuestion()
   S->>S: Next question, or finish (passed only if hearts > 0)
 ```
 
@@ -93,12 +96,13 @@ src/
 ├── App.jsx                              Page switch based on activeQuiz
 ├── components/
 │   ├── common/                          HeartBar, ProgressBar, StreakBadge, StatHeader
-│   ├── layout/                          TopNav
+│   ├── layout/                          TopNav (stats, sound toggle), Sidebar (progress, reset)
 │   ├── quiz/                            QuestionCard, QuizHeader, FeedbackModal
 │   └── question-types/                  MultipleChoice, WordBank, SynonymSpotter, WordLimit
 ├── data/
 │   ├── index.js                         Loads and orders lessons; getUnit(unitId)
 │   └── lessons/                         unit-01 … unit-03 JSON
+├── hooks/useSound.js                    Web Audio tones, no audio files
 ├── pages/                               Home, QuizView, SummaryView
 ├── store/
 │   ├── useGameStore.js                  Zustand store + localStorage persistence
@@ -182,7 +186,7 @@ Unit 4 shows at the end of the skill tree. It stays locked until Unit 3 is compl
 | Lesson file name (`src/data/lessons/`) | `string` | none | Must match `unit-NN-*.json` and start with its `unitId`; sets the unit order | Yes |
 
 > [!TIP]
-> To reset your progress, run `localStorage.removeItem('ste-lingo')` in the browser console and reload.
+> To start over, use **Reset progress** in the progress panel. It keeps your sound setting.
 
 <details>
 <summary><strong>Tailwind theme tokens (<code>tailwind.config.js</code>)</strong></summary>
@@ -263,7 +267,7 @@ Every question has `id`, `type`, `prompt` and `explanation`. The other fields de
 | `multiple_choice` | `options: string[]`, `correctIndex: number` | Option index | Index equals `correctIndex` |
 | `word_bank` | `tokens: string[]`, `correctAnswer: string[]` | Token indices, in tap order | The tapped tokens, joined with spaces, equal `correctAnswer` joined with spaces |
 | `synonym_spotter` | `sentence: string`, `unapprovedIndices: number[]`, `approvedAlternative: string` | Flagged word indices | Same set as `unapprovedIndices` (order does not matter) |
-| `word_limit` | `initialText: string`, `maxWords: number`, `acceptableKeywords: string[]` | Edited text | Word count ≤ `maxWords` and every keyword appears as whole words (case and punctuation ignored) |
+| `word_limit` | `initialText: string`, `maxWords: number`, `acceptableKeywords: string[]` | Edited text | Word count ≤ `maxWords`, every keyword appears as whole words (case and punctuation ignored), and no unapproved term is left in |
 
 > [!IMPORTANT]
 > `synonym_spotter` indices count words from `sentence.split(' ')`, so punctuation stays on its word. In `"Prior to the test, examine the oil level."`, `"test,"` is index 3.
@@ -281,7 +285,7 @@ Every question has `id`, `type`, `prompt` and `explanation`. The other fields de
 ```
 
 > [!WARNING]
-> `word_limit` grading checks only length and keywords. It does not reject unapproved words the learner leaves in the text.
+> The unapproved-term check in `word_limit` uses a short fixed list in `src/store/rules.js` (`utilize`, `employ`, `commence`, `initiate`, `terminate`, `ensure`, `inspect` and their forms, plus `prior to` and `in order to`). It is not the full ASD-STE100 dictionary. A wrong answer lists every problem it found.
 
 ### Game store (`useGameStore`)
 
@@ -293,11 +297,13 @@ Every question has `id`, `type`, `prompt` and `explanation`. The other fields de
 | `completedUnits` | `string[]` | Unit IDs passed at least once; unlocks the next unit |
 | `activeQuiz` | `object \| null` | `{ unitId, index, correctCount, wrongIds, feedback, finished, passed }` |
 | `startQuiz(unitId)` | action | Starts a fresh quiz |
-| `submitAnswer(answer)` | action | Grades the current question; sets `feedback` |
+| `submitAnswer(answer)` | action | Grades the current question, sets `feedback` and returns `true`/`false` |
 | `nextQuestion()` | action | Moves to the next question, or finishes. Passes only if hearts remain; then calls `completeUnit` |
 | `completeUnit(unitId)` | action | Marks the unit complete and updates the streak |
 | `resetHearts()` | action | Sets hearts back to `MAX_HEARTS` |
 | `exitQuiz()` | action | Sets `activeQuiz` to `null` |
+| `soundOn`, `toggleSound()` | `boolean`, action | Sound preference, saved with progress |
+| `resetProgress()` | action | Clears hearts, XP, streak, completed units and the active quiz; keeps `soundOn` |
 
 ```js
 import { useGameStore } from './store/useGameStore.js'
@@ -321,11 +327,12 @@ console.log(useGameStore.getState().xp) // previous XP + 10
 - [x] Feedback panel with confetti, shake and STE rule explanation
 - [x] Skill tree with locked units; summary with XP, accuracy and mistake review
 - [x] Zod lesson validator and GitHub Actions CI
-- [ ] Sound effects (`public/sounds/` is an empty placeholder)
+- [x] Sound effects with a mute toggle (synthesized, no audio files)
+- [x] Unapproved-word detection in `word_limit` answers (fixed list)
+- [x] Progress panel with reset
+- [x] Demo GIF
 - [ ] Heart refill over time (today: a manual "Refill hearts" button at 0 hearts)
-- [ ] Unapproved-word detection in `word_limit` answers
-- [ ] Lesson content review against the official ASD-STE100 dictionary
-- [ ] Demo GIF in `docs/assets/`
+- [ ] Lesson review against the official ASD-STE100 dictionary (word swaps were checked against third-party reproductions only)
 - [ ] `LICENSE` file
 
 ## Contributing & License

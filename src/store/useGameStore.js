@@ -6,15 +6,20 @@ import { MAX_HEARTS, XP_PER_CORRECT, isCorrect, localDay, nextStreak } from './r
 const quizMatchesLessons = (quiz) =>
   units.some((u) => u.unitId === quiz.unitId && quiz.index < u.questions.length)
 
+const freshProgress = {
+  hearts: MAX_HEARTS,
+  streak: 0,
+  lastActiveDate: null,
+  xp: 0,
+  completedUnits: [],
+  activeQuiz: null,
+}
+
 export const useGameStore = create()(
   persist(
     (set, get) => ({
-      hearts: MAX_HEARTS,
-      streak: 0,
-      lastActiveDate: null,
-      xp: 0,
-      completedUnits: [],
-      activeQuiz: null,
+      ...freshProgress,
+      soundOn: true,
 
       startQuiz: (unitId) =>
         set({
@@ -35,6 +40,7 @@ export const useGameStore = create()(
             feedback: { correct },
           },
         })
+        return correct
       },
 
       nextQuestion: () => {
@@ -62,6 +68,11 @@ export const useGameStore = create()(
       resetHearts: () => set({ hearts: MAX_HEARTS }),
 
       exitQuiz: () => set({ activeQuiz: null }),
+
+      // Keeps the sound setting: it is a preference, not progress.
+      resetProgress: () => set(freshProgress),
+
+      toggleSound: () => set({ soundOn: !get().soundOn }),
     }),
     {
       name: 'ste-lingo',
