@@ -1,0 +1,65 @@
+{
+  "unitId": "unit-03",
+  "unitTitle": "Breaking Noun Clusters",
+  "description": "Find noun clusters of four or more nouns and break them up with prepositions.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "What is the maximum number of nouns in an STE noun cluster?",
+      "options": ["Two", "Three", "Four", "Five"],
+      "correctIndex": 1,
+      "explanation": "STE does not permit noun clusters of more than three nouns. Longer clusters are difficult to understand."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Which phrase correctly breaks up 'engine oil pressure warning light'?",
+      "options": [
+        "engine oil pressure warning light",
+        "warning light for the engine oil pressure",
+        "light engine oil pressure warning"
+      ],
+      "correctIndex": 1,
+      "explanation": "Put the main noun first and use a preposition: 'warning light for the engine oil pressure'. 'Engine oil pressure' has only three nouns."
+    },
+    {
+      "id": "q3",
+      "type": "synonym_spotter",
+      "prompt": "Tap all the words in the noun cluster that is too long:",
+      "sentence": "Replace the fuel pump filter cover gasket.",
+      "unapprovedIndices": [2, 3, 4, 5, 6],
+      "approvedAlternative": "Replace the gasket of the cover on the fuel pump filter.",
+      "explanation": "'Fuel pump filter cover gasket' has five nouns. Use 'of' and 'on' to break it into groups of three nouns or fewer."
+    },
+    {
+      "id": "q4",
+      "type": "word_bank",
+      "prompt": "Break up the noun cluster: 'Examine the cabin air duct clamp.'",
+      "tokens": ["clamp", "the", "duct.", "Examine", "cabin", "on", "air", "the", "duct", "clamp."],
+      "correctAnswer": ["Examine", "the", "clamp", "on", "the", "cabin", "air", "duct."],
+      "explanation": "'Cabin air duct clamp' has four nouns. Put the main noun 'clamp' first, then use 'on': 'the clamp on the cabin air duct'."
+    },
+    {
+      "id": "q5",
+      "type": "multiple_choice",
+      "prompt": "Which sentence obeys the STE noun cluster rule?",
+      "options": [
+        "Disconnect the battery charger output cable.",
+        "Disconnect the output cable from the battery charger.",
+        "Disconnect the battery charger output cable connector."
+      ],
+      "correctIndex": 1,
+      "explanation": "'Battery charger output cable' has four nouns. 'The output cable from the battery charger' breaks it up with a preposition."
+    },
+    {
+      "id": "q6",
+      "type": "word_limit",
+      "prompt": "Edit this step to 20 words or fewer and break up the long noun cluster. Keep 'examine', 'spring', 'relief valve' and 'corrosion':",
+      "initialText": "In accordance with the maintenance manual, you must carefully examine the hydraulic system pressure relief valve spring for signs of corrosion damage before you install it again.",
+      "maxWords": 20,
+      "acceptableKeywords": ["examine", "spring", "relief valve", "corrosion"],
+      "explanation": "Keep the step short and put the main noun first: 'Examine the spring of the pressure relief valve for corrosion before you install it.'"
+    }
+  ]
+}
